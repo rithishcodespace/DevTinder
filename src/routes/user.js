@@ -58,6 +58,12 @@ userRoute.get("/user/connections",userAuth,async(req,res)=>{
 //user feed it should not contain interested, rejected, accepted profiles\
 userRoute.get("/feed",userAuth,async(req,res)=>{
     try{
+
+      let page = parseInt(req.query.page);
+      let limit = parseInt(req.query.limit);
+      limit = limit>50 ? 50 : limit;
+      let skip = (page-1)*limit;
+
       let  loggedInUser = req.user._id;
       let connectionrequestedUsers = await connectionRequest.find({
         $or : [{fromUserId:loggedInUser},
@@ -76,7 +82,9 @@ userRoute.get("/feed",userAuth,async(req,res)=>{
           {_id: {$ne : loggedInUser}} //ignore the logged in user
         ]
       }).select("firstName","lastName","age","gender");
-      res.send(users);
+      res.send(users)
+      .skip(page)
+      .limit(limit);
     }
     catch(error)
     {
