@@ -33,21 +33,21 @@ authRoute.post("/login",async(req,res)=>{
         else{
             const ispasswordvalid = await bcrypt.compare(req.body.password,user.password);
             if(!ispasswordvalid) return res.status(400).send("incorrect password!");
-            var token = jwt.sign({_id:user._id},"Rithish@2006",{ expiresIn: "7d" });
+            var token = jwt.sign({_id:user._id},"Rithish@2006",{ expiresIn: "15m" });
             res.cookie("token",token);
-            res.send("logged in successfully");
+            res.send(user);
             
         }
     }
     catch(error)
     {
-       return res.status(500).send("something went wrong"+error.message);
+       return res.status(500).send(error.message + "!");
     }
 
 })
-authRoute.post("/logout",(req,res)=>{
+authRoute.delete("/logout",(req,res)=>{
     res.cookie("token",null,{expires: new Date(Date.now())});
-    res.send("Logged out successfull!!");
+    res.status(200).send("Logged out successfull!!");
 })
 
 module.exports = authRoute
