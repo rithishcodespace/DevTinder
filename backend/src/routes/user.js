@@ -56,6 +56,15 @@ userRoute.get("/user/connections",userAuth,async(req,res)=>{
 })
 
 //user feed it should not contain interested, rejected, accepted profiles\
+//http://localhost:3000/feed?page=1&limit=10
+///feed → Your route.
+
+// ?page=1&limit=10 → Query parameters for pagination.
+
+// page=1 → Get the first page.
+
+// limit=10 → Show 10 users per page (max limit is 50 based on your code).
+
 userRoute.get("/feed",userAuth,async(req,res)=>{
     try{
 
@@ -69,7 +78,8 @@ userRoute.get("/feed",userAuth,async(req,res)=>{
         $or : [{fromUserId:loggedInUser},
             {toUserId:loggedInUser}
         ]
-      }).select("firstName","lastName","age","gender");
+      }).select({ firstName: 1, lastName: 1, age: 1, gender: 1 });
+
 
       let hideFromUserFeed = new Set();
       connectionrequestedUsers.forEach((req)=>{
@@ -81,10 +91,11 @@ userRoute.get("/feed",userAuth,async(req,res)=>{
         $and : [{_id : {$nin : Array.from(hideFromUserFeed)}}, //ignore all the conection request 
           {_id: {$ne : loggedInUser}} //ignore the logged in user
         ]
-      }).select("firstName","lastName","age","gender");
-      res.send(users)
+      }).select({ firstName: 1, lastName: 1, age: 1, gender: 1 })
       .skip(page)
       .limit(limit);
+
+      res.send(users)
     }
     catch(error)
     {

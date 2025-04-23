@@ -8,11 +8,11 @@ let {Validate} = require("../utils/validate")
 
 
 authRoute.post("/signup",async (req,res)=>{
-    const {firstName,lastName,emailId,password,age,gender} = req.body;
+    let {firstName,lastName,emailId,password,age,gender} = req.body;
     try{
      Validate(req.body);
-     let Password = await bcrypt.hash(password,10);
-     const newuser = new User({firstName,lastName,emailId,password:Password,age,gender});
+     password = await bcrypt.hash(password,10);
+     const newuser = new User({firstName,lastName,emailId,password,age,gender});
      await newuser.save();
      res.send("user logged in successfully!!");
     }
@@ -28,12 +28,12 @@ authRoute.post("/login",async(req,res)=>{
         let user = await User.findOne({emailId: req.body.emailId});
         if(!user)
         {
-        throw new Error("user not found");
+          res.status(404).send("user not found!");
         }
         else{
             const ispasswordvalid = await bcrypt.compare(req.body.password,user.password);
             if(!ispasswordvalid) return res.status(400).send("incorrect password!");
-            var token = jwt.sign({_id:user._id},"Rithish@2006",{ expiresIn: "15m" });
+            var token = jwt.sign({_id:user._id},"Rithish@2006",{ expiresIn: "1hr" });
             res.cookie("token",token);
             res.send(user);
             
