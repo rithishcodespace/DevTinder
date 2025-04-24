@@ -2,7 +2,7 @@ const FeedCard = ({user}) => {
     const {firstName,lastName,age,gender} = user;
     return(
         <div>
-          <div className="card bg-black w-96 shadow-sm mt-5">
+          <div className="card bg-black w-96 shadow-sm m-3">
             <figure>
                 <img
                 src=" https://cdn-icons-png.flaticon.com/512/3641/3641599.png "

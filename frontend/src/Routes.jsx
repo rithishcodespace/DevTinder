@@ -5,6 +5,8 @@ import Home from "./components/Home";
 import Feed from "./components/Feed";
 import EditProfile from "./components/EditProfile";
 import Profile from "./components/Profile";
+import Connections from "./components/Connections";
+import Requests from "./components/Requests";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,14 @@ const router = createBrowserRouter([
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path:"/connections",
+      element:<Connections/>
+    },
+    {
+      path:"/request",
+      element:<Requests/>
     }] 
   }
 ]);

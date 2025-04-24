@@ -25,35 +25,36 @@ userRoute.get("/user/requests/received",userAuth,async(req,res)=>{
 })
 
 //show the persons who are in our connections
-userRoute.get("/user/connections",userAuth,async(req,res)=>{
-  try{
-    let loggedInUser = req.user;
-    let availableConnections = connectionRequest.find({
-        $or: [
-            {toUserId:loggedInUser,status:"accepted"},
-            {fromUserId:loggedInUser,status:"accepted"},
-        ]
-    }).populate("fromUserId",["firstName,lastName"]).populate("toUserId",["firstName","lastName"]);
+userRoute.get("/user/connections", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
 
-    const data = await availableConnections.map((row)=>{
-        if(row.fromUserId._id.toString() == row.toUserId._id.toString())
-        {
-            return row.fromUserId;
-        }
-        return row.toUserId;
+    const availableConnections = await connectionRequest.find({
+      $or: [
+        { toUserId: loggedInUser, status: "accepted" },
+        { fromUserId: loggedInUser, status: "accepted" },
+      ]
     })
+      .populate("fromUserId", ["firstName", "lastName"])
+      .populate("toUserId", ["firstName", "lastName"]);
 
-    if(!availableConnections)
-    {
-        res.status(404).send("Error no available connections");
+    if (!availableConnections.length) {
+      return res.status(404).send("Error: no available connections");
     }
-    res.send(availableConnections);
+
+    const data = availableConnections.map((row) => {
+      if (row.fromUserId._id.toString() === loggedInUser.toString()) {
+        return row.toUserId;
+      }
+      return row.fromUserId;
+    });
+
+    res.send(data);
+  } catch (error) {
+    res.status(500).send("Error in fetching available connections: " + error.message);
   }
-  catch(error)
-  {
-    res.status(404).send("Error in fetching available connectins:"+ error.message);
-  }
-})
+});
+
 
 //user feed it should not contain interested, rejected, accepted profiles\
 //http://localhost:3000/feed?page=1&limit=10

@@ -29,7 +29,7 @@ const Navbar = () => {
     <div className="flex gap-2">
         <div className="dropdown dropdown-end">
         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-            <div className="w-10 rounded-full">
+            <div className="w-10 rounded-full" onClick={() => navigate("")}>
             <img
                 alt="Tailwind CSS Navbar component"
                 src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
@@ -44,7 +44,8 @@ const Navbar = () => {
                 <span className="badge">New</span>
             </Link>
             </li>
-            <li><a>Settings</a></li>
+            <li><Link to="request">Connection request</Link></li>
+            <li><Link to="connections">Connections</Link></li>
             <li onClick={handleLogout}><a href="">Logout</a></li>
         </ul>
         </div>
