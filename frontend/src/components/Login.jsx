@@ -10,6 +10,9 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, seterror] = useState("");
+  const [firstName,setfirstName] = useState("");
+  const [lastName,setlastName] = useState("");
+  const [isLoginForm,setisLoginForm] = useState(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,10 +39,29 @@ function Login() {
     }
   };
 
+  async function handleSignup()
+  {
+    let response = await axios.post("http://localhost:3000/signup",{
+      "firstName":firstName,
+      "lastName":lastName,
+      "emailId":email,
+      "password":password
+    },
+    {
+      withCredentials:true
+    })
+    if(response.status === 200)
+    {
+      dispatch(addUser(response.data));
+      console.log(response.data);
+      navigate("/profile");
+    }
+  }
+
   return (
     <div className="flex items-center justify-center h-screen bg-[#1e1e1e]">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={isLoginForm ? handleSubmit : handleSignup}
         className="bg-[#2d2d2d] p-10 rounded-lg shadow-lg text-center w-full max-w-md"
       >
         <div className="mb-6">
@@ -49,8 +71,33 @@ function Login() {
             className="w-28 h-28 mx-auto mb-4"
           />
           <h2 className="text-2xl font-bold text-white mb-1">DevTinder</h2>
-          <p className="text-gray-400">Login to your account</p>
+          <p className="text-gray-400">{isLoginForm ? "Login" : "Signup"} to your account</p>
         </div>
+
+        { isLoginForm && 
+        <>
+        <div className="mb-4 text-left">
+          <label className="block mb-1 text-white">FirstName</label>
+          <input
+            type="text"
+            className="w-full px-3 py-2 border border-gray-600 bg-[#1e1e1e] text-white rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
+            value={firstName}
+            onChange={(e) => setfirstName(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="mb-4 text-left">
+          <label className="block mb-1 text-white">LastName</label>
+          <input
+            type="text"
+            className="w-full px-3 py-2 border border-gray-600 bg-[#1e1e1e] text-white rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
+            value={lastName}
+            onChange={(e) => setlastName(e.target.value)}
+            required
+          />
+        </div>
+        </>}
 
         <div className="mb-4 text-left">
           <label className="block mb-1 text-white">Email</label>
@@ -78,10 +125,12 @@ function Login() {
 
         <button
           type="submit"
-          className="w-full bg-pink-600 text-white py-2 rounded hover:bg-pink-700 transition"
+          className="cursor-pointer w-full bg-pink-600 text-white py-2 rounded hover:bg-pink-700 transition"
         >
-          Login
+          {isLoginForm ? "Login" : "Signup"}
         </button>
+
+        <p className="m-2 text-white text-sm cursor-pointer" onClick={() => setisLoginForm(!isLoginForm)}>{isLoginForm ? "New User Signup here!" : "Existing User? Login here"}</p>
 
         <p className="text-gray-500 text-xs mt-4">
           © ACME Industries Ltd. Providing reliable tech since 1992

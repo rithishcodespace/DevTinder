@@ -15,7 +15,7 @@ const userAuth = async (req,res,next) =>{
   }
   catch(error)
   {
-    res.status(400).send("Error occured in authentication"+error.message);
+    res.status(400).send("Error occured in authentication "+error.message);
   }
 }
 

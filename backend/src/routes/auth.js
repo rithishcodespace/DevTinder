@@ -13,8 +13,15 @@ authRoute.post("/signup",async (req,res)=>{
      Validate(req.body);
      password = await bcrypt.hash(password,10);
      const newuser = new User({firstName,lastName,emailId,password,age,gender});
-     await newuser.save();
-     res.send("user logged in successfully!!");
+     const savedUser = await newuser.save();
+     
+     var token = jwt.sign({_id:savedUser._id},"Rithish@2006",{ expiresIn: "1hr" });
+     res.cookie("token",token);
+
+     res.json({  
+        message:"User signup successfully!",
+        "userDetails":savedUser
+     });
     }
     catch(error)
     {

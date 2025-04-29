@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect,useState } from 'react';
 import axios from 'axios';
-import FeedCard from "./FeedCard"
+import FeedCard from './feedCard';
 
 const Connections = () => {
 
@@ -28,11 +28,12 @@ const Connections = () => {
 
   return (
     <div>
-      <p>Connections</p>
-       {isEmpty && <p>No Connections Found</p>}
-       {connections && <div className='flex flex-wrap justify-around items-center'>
+      <div>
+      <p className='absolute right-[680px] text-3xl font-mono top-18'>Connections</p>
+      </div>
+       {connections && <div className='flex flex-wrap justify-around items-center mt-10.5'>
          {connections.map((card,index) => (
-            <FeedCard key={index} user = {card}/>
+            <FeedCard key={index} user = {card} showActions={false}/>
          ))}
        </div>}
     </div>

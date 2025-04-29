@@ -21,11 +21,11 @@ requestRoute.post("/request/send/:status/:toUserId",userAuth,async(req,res)=>{
 
         const existingConnectionRequest = await connectionRequestModel.findOne({
             $or:[
-                    {fromUserId,toUserId},
-                    {fromUserId:toUserId,toUserId:fromUserId},
-                    {fromUserId:fromUserId,toUserId:fromUserId}
+                {fromUserId, toUserId},
+                {fromUserId:toUserId, toUserId:fromUserId}
             ]
         });
+        
 
         let flagId = await userModel.findOne({_id:fromUserId});
 
