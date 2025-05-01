@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useEffect } from "react";
-import FeedCard from "./feedCard";
+import FeedCard from "./FeedCard";
 
 function EditProfile({user}) {
 

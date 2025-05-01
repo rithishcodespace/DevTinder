@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useSelector,useDispatch } from "react-redux";
-import FeedCard from "./feedCard";
+import FeedCard from "./FeedCard";
 import { addUserToFeed } from "../utils/feedSlice";
 
 const Feed = () =>{

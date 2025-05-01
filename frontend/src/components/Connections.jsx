@@ -1,8 +1,7 @@
 import React from 'react';
 import { useEffect,useState } from 'react';
 import axios from 'axios';
-import FeedCard from './feedCard';
-
+import FeedCard from './FeedCard';
 const Connections = () => {
 
   const[connections,setconnections] = useState([]);
