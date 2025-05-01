@@ -7,56 +7,61 @@ import { addUser } from "../utils/userSlice";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, seterror] = useState("");
-  const [firstName,setfirstName] = useState("");
-  const [lastName,setlastName] = useState("");
-  const [isLoginForm,setisLoginForm] = useState(true);
+  const [error, setError] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
+  const [isLoginForm, setIsLoginForm] = useState(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(email, password);
-      let response = await axios.post(
+      const response = await axios.post(
         "http://localhost:3000/login",
-        { emailId: email, password: password },
+        { emailId: email, password },
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
       if (response.status === 200) {
-        alert("success");
+        alert("Login success");
         dispatch(addUser(response.data));
-        console.log(response.data);
         navigate("/");
       }
     } catch (error) {
-      seterror(error.response.data);
+      setError(error.response?.data || "Login failed");
     }
   };
 
-  async function handleSignup()
-  {
-    let response = await axios.post("http://localhost:3000/signup",{
-      "firstName":firstName,
-      "lastName":lastName,
-      "emailId":email,
-      "password":password
-    },
-    {
-      withCredentials:true
-    })
-    if(response.status === 200)
-    {
-      dispatch(addUser(response.data));
-      console.log(response.data);
-      navigate("/profile");
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/signup",
+        {
+          firstName,
+          lastName,
+          emailId: email,
+          password,
+          age,
+          gender: gender,
+        },
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        alert("Signup success");
+        dispatch(addUser(response.data));
+        navigate("/profile");
+      }
+    } catch (error) {
+      setError(error.response?.data || "Signup failed");
     }
-  }
+  };
 
   return (
     <div className="flex items-center justify-center h-screen bg-[#1e1e1e]">
@@ -64,40 +69,43 @@ function Login() {
         onSubmit={isLoginForm ? handleSubmit : handleSignup}
         className="bg-[#2d2d2d] p-10 rounded-lg shadow-lg text-center w-full max-w-md"
       >
-        <div className="mb-6">
+        {isLoginForm && <div className="mb-6">
           <img
             src="https://cdn-icons-png.flaticon.com/512/1995/1995564.png"
             alt="avatar"
             className="w-28 h-28 mx-auto mb-4"
           />
           <h2 className="text-2xl font-bold text-white mb-1">DevTinder</h2>
-          <p className="text-gray-400">{isLoginForm ? "Login" : "Signup"} to your account</p>
-        </div>
+          <p className="text-gray-400">
+            {isLoginForm ? "Login" : "Signup"} to your account
+          </p>
+        </div>}
 
-        { isLoginForm && 
-        <>
-        <div className="mb-4 text-left">
-          <label className="block mb-1 text-white">FirstName</label>
-          <input
-            type="text"
-            className="w-full px-3 py-2 border border-gray-600 bg-[#1e1e1e] text-white rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
-            value={firstName}
-            onChange={(e) => setfirstName(e.target.value)}
-            required
-          />
-        </div>
+        {!isLoginForm && (
+          <>
+            <div className="mb-4 text-left">
+              <label className="block mb-1 text-white">First Name</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 border border-gray-600 bg-[#1e1e1e] text-white rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+              />
+            </div>
 
-        <div className="mb-4 text-left">
-          <label className="block mb-1 text-white">LastName</label>
-          <input
-            type="text"
-            className="w-full px-3 py-2 border border-gray-600 bg-[#1e1e1e] text-white rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
-            value={lastName}
-            onChange={(e) => setlastName(e.target.value)}
-            required
-          />
-        </div>
-        </>}
+            <div className="mb-4 text-left">
+              <label className="block mb-1 text-white">Last Name</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 border border-gray-600 bg-[#1e1e1e] text-white rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+              />
+            </div>
+          </>
+        )}
 
         <div className="mb-4 text-left">
           <label className="block mb-1 text-white">Email</label>
@@ -121,6 +129,32 @@ function Login() {
           />
         </div>
 
+        {!isLoginForm && (
+          <>
+            <div className="mb-4 text-left">
+              <label className="block mb-1 text-white">Age</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 border border-gray-600 bg-[#1e1e1e] text-white rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="mb-4 text-left">
+              <label className="block mb-1 text-white">Gender</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 border border-gray-600 bg-[#1e1e1e] text-white rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                required
+              />
+            </div>
+          </>
+        )}
+
         <p className="text-red-500 text-sm mb-4">{error}</p>
 
         <button
@@ -130,7 +164,14 @@ function Login() {
           {isLoginForm ? "Login" : "Signup"}
         </button>
 
-        <p className="m-2 text-white text-sm cursor-pointer" onClick={() => setisLoginForm(!isLoginForm)}>{isLoginForm ? "New User Signup here!" : "Existing User? Login here"}</p>
+        <p
+          className="m-2 text-white text-sm cursor-pointer"
+          onClick={() => setIsLoginForm(!isLoginForm)}
+        >
+          {isLoginForm
+            ? "New User? Signup here!"
+            : "Existing User? Login here"}
+        </p>
 
         <p className="text-gray-500 text-xs mt-4">
           © ACME Industries Ltd. Providing reliable tech since 1992

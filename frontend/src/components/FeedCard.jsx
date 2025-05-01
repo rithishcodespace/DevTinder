@@ -10,6 +10,7 @@ const FeedCard = ({ user, showActions = true }) => {
     try {
       const response = await axios.post(`http://localhost:3000/request/send/${status}/${_id}`, {}, { withCredentials: true });
       dispatch(removeUserFromFeed(_id));
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
