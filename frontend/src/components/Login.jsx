@@ -21,7 +21,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/login",
+        "/api/login",
         { emailId: email, password },
         {
           headers: { "Content-Type": "application/json" },
@@ -42,7 +42,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/signup",
+        "/api/signup",
         {
           firstName,
           lastName,

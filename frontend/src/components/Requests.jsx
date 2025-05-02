@@ -11,7 +11,7 @@ const Requests = () => {
 
   async function handleClick(status,userId)
   {
-    const res = await axios.post(`http://localhost:3000/request/review/${status}/${userId}`,{},{
+    const res = await axios.post(`/api/request/review/${status}/${userId}`,{},{
       headers:{
         "Content-Type":"Application/json"
       },
@@ -25,7 +25,7 @@ const Requests = () => {
 
   async function fetchRequest()
   {
-    const response = await axios.get("http://localhost:3000/user/requests/received",{
+    const response = await axios.get("/api/user/requests/received",{
       headers:{
         "Content-Type":"application/json"
       },

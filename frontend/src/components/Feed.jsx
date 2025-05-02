@@ -10,7 +10,7 @@ const Feed = () =>{
     const selector = useSelector((Store) => Store.feedSlice);
     async function getFeed()
     {
-       const response = await axios.get("http://localhost:3000/feed?page=1&limit=1",{
+       const response = await axios.get("/api/feed?page=1&limit=1",{
         headers:{
             "Content-Type":"application/json"
         },

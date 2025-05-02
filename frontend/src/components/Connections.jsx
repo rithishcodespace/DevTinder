@@ -8,7 +8,7 @@ const Connections = () => {
   const[isEmpty,setisEmpty] = useState(false);
 
   async function fetchConnections(){
-    const response = await axios.get("http://localhost:3000/user/connections",{
+    const response = await axios.get("/api/user/connections",{
         withCredentials:true
     })
     if(response.status === 200)

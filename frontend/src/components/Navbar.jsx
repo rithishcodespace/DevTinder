@@ -10,7 +10,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   async function handleLogout()
   {
-    const response = await axios.delete("http://localhost:3000/logout",{
+    const response = await axios.delete("/api/logout",{
         withCredentials:true
     })
     if(response.status == 200)

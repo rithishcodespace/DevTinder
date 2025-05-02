@@ -19,7 +19,7 @@ function EditProfile({user}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch("http://localhost:3000/profile/edit",{
+      const response = await axios.patch("/api/profile/edit",{
         "firstName":firstName,
         "lastName":lastName,
         "age":age,

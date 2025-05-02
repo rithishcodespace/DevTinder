@@ -12,7 +12,7 @@ const Home = () => {
 
    const fetchUser = async() => { // you cant go to anyother page without logging in since this api will be on everypage, as it is the root level component
      try{
-        const response = await axios.get("http://localhost:3000/profile/view",{
+        const response = await axios.get("api/profile/view",{
         headers:{
           "Content-Type":"application/json"
         },

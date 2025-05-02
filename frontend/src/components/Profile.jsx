@@ -9,7 +9,7 @@ const Profile = () => {
   const [profile,setprofile] = useState("");
   async function fetchData()
   {
-    const response = await axios.get("http://localhost:3000/profile/view",{
+    const response = await axios.get("/api/profile/view",{
       withCredentials:true
     })
     if(response.status === 200)setprofile(response.data);
