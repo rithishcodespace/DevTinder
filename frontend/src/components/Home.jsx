@@ -4,6 +4,7 @@ import { useDispatch,useSelector } from 'react-redux';
 import { addUser } from '../utils/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { BASE_URL } from '../utils/constants';
 
 const Home = () => {
 
@@ -12,7 +13,7 @@ const Home = () => {
 
    const fetchUser = async() => { // you cant go to anyother page without logging in since this api will be on everypage, as it is the root level component
      try{
-        const response = await axios.get("api/profile/view",{
+        const response = await axios.get(`${BASE_URL}/profile/view`,{
         headers:{
           "Content-Type":"application/json"
         },

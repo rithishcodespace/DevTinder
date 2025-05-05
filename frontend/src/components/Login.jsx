@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { BASE_URL } from "../utils/constants";
 
 function Login() {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "/api/login",
+        `${BASE_URL}/login`,
         { emailId: email, password },
         {
           headers: { "Content-Type": "application/json" },
@@ -42,7 +43,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "/api/signup",
+        `${BASE_URL}/signup`,
         {
           firstName,
           lastName,

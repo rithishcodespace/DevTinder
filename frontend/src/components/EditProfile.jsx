@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useEffect } from "react";
 import FeedCard from "./FeedCard";
+import { BASE_URL } from "../utils/constants";
 
 function EditProfile({user}) {
 
@@ -19,7 +20,7 @@ function EditProfile({user}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch("/api/profile/edit",{
+      const response = await axios.patch(`${BASE_URL}/profile/edit`,{
         "firstName":firstName,
         "lastName":lastName,
         "age":age,

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
+import { BASE_URL } from "../utils/constants";
 
 const FeedCard = ({ user, showActions = true }) => {
   const dispatch = useDispatch();
@@ -8,7 +9,7 @@ const FeedCard = ({ user, showActions = true }) => {
 
   async function handleConnections(status, _id) {
     try {
-      const response = await axios.post(`/api/request/send/${status}/${_id}`, {}, { withCredentials: true });
+      const response = await axios.post(`${BASE_URL}/request/send/${status}/${_id}`, {}, { withCredentials: true });
       dispatch(removeUserFromFeed(_id));
       window.location.reload();
     } catch (error) {

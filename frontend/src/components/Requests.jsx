@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect } from 'react';
 import { useDispatch,useSelector } from 'react-redux';
 import { addRequests, removeRequests } from '../utils/requestSlice';
+import { BASE_URL } from '../utils/constants';
 
 const Requests = () => {
 
@@ -11,7 +12,7 @@ const Requests = () => {
 
   async function handleClick(status,userId)
   {
-    const res = await axios.post(`/api/request/review/${status}/${userId}`,{},{
+    const res = await axios.post(`${BASE_URL}/request/review/${status}/${userId}`,{},{
       headers:{
         "Content-Type":"Application/json"
       },
@@ -25,7 +26,7 @@ const Requests = () => {
 
   async function fetchRequest()
   {
-    const response = await axios.get("/api/user/requests/received",{
+    const response = await axios.get(`${BASE_URL}/user/requests/received`,{
       headers:{
         "Content-Type":"application/json"
       },

@@ -2,13 +2,14 @@ import React from 'react';
 import { useEffect,useState } from 'react';
 import axios from 'axios';
 import FeedCard from './FeedCard';
+import { BASE_URL } from '../utils/constants';
 const Connections = () => {
 
   const[connections,setconnections] = useState([]);
   const[isEmpty,setisEmpty] = useState(false);
 
   async function fetchConnections(){
-    const response = await axios.get("/api/user/connections",{
+    const response = await axios.get(`${BASE_URL}/user/connections`,{
         withCredentials:true
     })
     if(response.status === 200)

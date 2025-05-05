@@ -15,7 +15,7 @@ authRoute.post("/signup",async (req,res)=>{
      const newuser = new User({firstName,lastName,emailId,password,age,gender});
      const savedUser = await newuser.save();
      
-     var token = jwt.sign({_id:savedUser._id},"Rithish@2006",{ expiresIn: "1hr" });
+     var token = jwt.sign({_id:savedUser._id},process.env.JWT_SECRET,{ expiresIn: "1hr" });
      res.cookie("token",token);
 
      res.json({  
@@ -40,7 +40,7 @@ authRoute.post("/login",async(req,res)=>{
         else{
             const ispasswordvalid = await bcrypt.compare(req.body.password,user.password);
             if(!ispasswordvalid) return res.status(400).send("incorrect password!");
-            var token = jwt.sign({_id:user._id},"Rithish@2006",{ expiresIn: "1hr" });
+            var token = jwt.sign({_id:user._id},process.env.JWT_SECRET,{ expiresIn: "1hr" });
             res.cookie("token",token);
             res.send(user);
             

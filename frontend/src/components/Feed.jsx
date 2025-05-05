@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useSelector,useDispatch } from "react-redux";
 import FeedCard from "./FeedCard";
 import { addUserToFeed } from "../utils/feedSlice";
+import { BASE_URL } from "../utils/constants";
 
 const Feed = () =>{
 
@@ -10,7 +11,7 @@ const Feed = () =>{
     const selector = useSelector((Store) => Store.feedSlice);
     async function getFeed()
     {
-       const response = await axios.get("/api/feed?page=1&limit=1",{
+       const response = await axios.get(`${BASE_URL}/feed?page=1&limit=1`,{
         headers:{
             "Content-Type":"application/json"
         },
