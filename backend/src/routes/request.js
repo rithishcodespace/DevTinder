@@ -3,7 +3,7 @@ let requestRoute = express.Router();
 let connectionRequestModel = require("../models/connectionRequest");
 let userAuth = require("../middlewares/auth");
 let userModel = require("../models/user");
-let sendEmail = require("../utils/sendEmail");
+let sendEmail = require("../utils/sendEmail"); // file import
 
 // sending request
 requestRoute.post("/request/send/:status/:toUserId",userAuth,async(req,res)=>{
@@ -48,7 +48,13 @@ requestRoute.post("/request/send/:status/:toUserId",userAuth,async(req,res)=>{
         });
 
         const data = await newConnectionRequest.save();
-        const emailRes = await sendEmail.run();
+        const emailRes = await sendEmail.run(
+            "rithishvkv@gmail.com",
+            "rithishcodespace@gmail.com",
+            "New Connection Request!",
+            "<h1>You got a new request</h1><p>Check DevTinder now.</p>",
+            "You got a new request. Check DevTinder now."
+        );
         console.log(emailRes);
         res.json({message : "connection request sent successfully!",data});
     }

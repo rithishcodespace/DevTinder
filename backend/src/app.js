@@ -7,6 +7,7 @@ let authRoute = require("./routes/auth");
 let profileRoute = require("./routes/profile");
 let requestRoute = require("./routes/request");
 let userRoute = require("./routes/user");
+const cron = require("./utils/Cron") // imported globally so the file will start execute
 
 const app = express();
 app.use(cookieParser());
