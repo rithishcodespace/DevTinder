@@ -8,7 +8,7 @@ const sendEmail = require("./sendEmail") // imported file
 cron.schedule("0 8 * * *",async() => { // this cron string runs at 8 am everyday
     // send emails to all persons who got request the previous day
     try{
-        const yesterday = subDays (new Date(),1) // current date - 1 day
+        const yesterday = subDays (new Date(),1) // current date - 1 day(yesterdays's date)
         const yesterdayStart = startOfDay(yesterday); // time stamp
         const yesterdayEnd = endOfDay(yesterday);
 
@@ -21,7 +21,7 @@ cron.schedule("0 8 * * *",async() => { // this cron string runs at 8 am everyday
         }).populate("fromUserId toUserId") //fetch related data from another collection. Think of it like a JOIN in SQL.
 
         // avoiding duplicates request to a single person from multiple persons
-        const listOfEmails = [...new Set(pendingRequests.map(req = req.toUserId.emailId))] // creates an array of without duplicates
+        const listOfEmails = [...new Set(pendingRequests.map(req => req.toUserId.emailId))] // creates an array of without duplicates
 
         for (const email of listOfEmails) {
             const res = await sendEmail.run(
