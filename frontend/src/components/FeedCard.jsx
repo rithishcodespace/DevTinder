@@ -2,6 +2,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 import { BASE_URL } from "../utils/constants";
+import { Link } from "react-router-dom";
 
 const FeedCard = ({ user, showActions = true }) => {
   const dispatch = useDispatch();
@@ -42,6 +43,9 @@ const FeedCard = ({ user, showActions = true }) => {
                 </div>
               </div>
             )}
+            {!showActions && 
+              <Link to={`chat/${_id}`}><button className="btn btn-primary bg-violet-400 m-2">Chat</button></Link>
+            }
           </div>
         )}
       </div>

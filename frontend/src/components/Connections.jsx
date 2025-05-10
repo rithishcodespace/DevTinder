@@ -19,6 +19,7 @@ const Connections = () => {
       {
         setisEmpty(true);
       }
+      console.log(response.data);
     }
   }
 

@@ -7,6 +7,7 @@ import EditProfile from "./components/EditProfile";
 import Profile from "./components/Profile";
 import Connections from "./components/Connections";
 import Requests from "./components/Requests";
+import Chat from "./components/Chat"
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
     {
       path:"/request",
       element:<Requests/>
+    },
+    {
+      path:"connections/chat/:targetUserId",
+      element:<Chat/>
     }] 
   }
 ]);
