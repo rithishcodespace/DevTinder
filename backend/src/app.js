@@ -8,6 +8,8 @@ let profileRoute = require("./routes/profile");
 let requestRoute = require("./routes/request");
 let userRoute = require("./routes/user");
 const cron = require("./utils/Cron") // imported globally so the file will start execute
+const http = require("http"); // socket.io
+const initializeSocket = require("./utils/socket");
 
 const app = express();
 app.use(cookieParser());
@@ -25,9 +27,12 @@ app.use("/",profileRoute);
 app.use("/",requestRoute);
 app.use("/",userRoute);
 
-connectDB().then(()=>{
+const server = http.createServer(app) // socket.io -> app is instance of express
+initializeSocket(server) // socket.io -> see in utils
+
+connectDB().then(()=>{ // app -> sever for socket.io
     console.log("Db connected successfully!");
-    app.listen(3000,()=>console.log("port successfully running on port 3000"));
+    server.listen(3000,()=>console.log("port successfully running on port 3000"));
 }).catch((error)=>{
     console.log("Error occured in db connection"+error.message);
 })

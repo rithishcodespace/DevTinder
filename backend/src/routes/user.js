@@ -24,7 +24,7 @@ userRoute.get("/user/requests/received",userAuth,async(req,res)=>{
     }
 })
 
-//show the persons who are in our connections
+// Show the persons who are in our connections
 userRoute.get("/user/connections", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
@@ -42,18 +42,20 @@ userRoute.get("/user/connections", userAuth, async (req, res) => {
       return res.status(404).send("Error: no available connections");
     }
 
-    const data = availableConnections.map((row) => {
-      if (row.fromUserId._id.toString() === loggedInUser.toString()) {
-        return row.toUserId;
-      }
-      return row.fromUserId;
-    });
+    const data = [
+      ...new Set(availableConnections.map((row) => 
+        row.fromUserId._id.toString() === loggedInUser.toString() 
+          ? JSON.stringify(row.toUserId) 
+          : JSON.stringify(row.fromUserId)
+      ))
+    ].map((user) => JSON.parse(user));
 
     res.send(data);
   } catch (error) {
     res.status(500).send("Error in fetching available connections: " + error.message);
   }
 });
+
 
 
 //user feed it should not contain interested, rejected, accepted profiles\
