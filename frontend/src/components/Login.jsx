@@ -32,6 +32,7 @@ function Login() {
       if (response.status === 200) {
         alert("Login success");
         dispatch(addUser(response.data));
+        localStorage.setItem("userDetails",JSON.stringify(response.data));
         navigate("/");
       }
     } catch (error) {
@@ -57,6 +58,7 @@ function Login() {
       if (response.status === 200) {
         alert("Signup success");
         dispatch(addUser(response.data));
+        localStorage.setItem("userDetails",JSON.stringify(response.data));
         navigate("/profile");
       }
     } catch (error) {

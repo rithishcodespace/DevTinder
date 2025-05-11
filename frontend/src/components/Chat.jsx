@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { createSocketConnection } from '../utils/socket';
 import { useSelector } from 'react-redux';
@@ -6,37 +6,51 @@ import Store from '../utils/ReduxStore';
 
 const Chat = () => {
   const { targetUserId } = useParams();
-  const [messages, setMessages] = useState([{ message: "Hello, Bro", self: false }]);
+  const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
-
+  const socketRef = useRef(null);
+  const messageEndRef = useRef(null);
   
 
   const selector = useSelector((Store) => Store.userSlice);
-  const userId = selector?._id;
+  const userDetails = JSON.parse(localStorage.getItem("userDetails") || "{}");
+  const userId = selector?._id || userDetails._id;
+
 
   useEffect(()=>{
     // Establish socket connection only if userId and targetUserId are available
-    if(!userId || !targetUserId)return; 
-    const socket = createSocketConnection();
-    socket.emit("joinChat",{userId,targetUserId});
+    if(!userId || !targetUserId)return;
+    socketRef.current = createSocketConnection();
+    socketRef.current.emit("joinChat", { userId, targetUserId });
+
+    // receiving the message -> the message sent by recepient will first reach backend code from that we can get here
+    socketRef.current.on("messageReceived",({firstName,text}) => {
+      console.log(firstName + " : " + text)
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { firstName, text, self: true },
+      ]);
+    })
 
     // Cleanup socket connection on unmount(this return will be called on unmouting)
     return () => {
-      socket.disconnect();
+       socketRef.current.disconnect();
     }
   },[userId,targetUserId]);
 
   // Function to send a message
   const sendMessage = () => {
-    if (!inputMessage.trim()) return;
-    const socket = createSocketConnection();
-    socket.emit("sendMessage",{         // sends the message to the backend
+    if (!inputMessage.trim() || !socketRef.current) return;
+    socketRef.current.emit("sendMessage",{         // sends the message to the backend
     firstName : selector.firstName,
     userId,
     targetUserId,
     text:inputMessage
   }) 
-    setMessages([...messages, { message: inputMessage, self: true }]);
+    // setMessages((prevMessages) => [
+    //   ...prevMessages,
+    //   { firstName: "You", text: inputMessage, self: true },
+    // ]);
     setInputMessage("");
   };
 
@@ -47,10 +61,10 @@ const Chat = () => {
     {messages.map((msg, index) => (
       <div key={index} className={`chat ${msg.self ? 'chat-end' : 'chat-start'}`}>
         <div className='chat-header flex items-center gap-2'>
-          <span>{msg.self ? "You" : "Rithish S"}</span>
+          <span>{msg.self ? "You" : msg.firstName}</span>
           <time className='text-xs opacity-50'>2 hours ago</time>
         </div>
-        <div className='chat-bubble'>{msg.message}</div>
+        <div className='chat-bubble'>{msg.text}</div>
         <div className='chat-footer opacity-50'>Seen</div>
       </div>
     ))}

@@ -31,8 +31,8 @@ userRoute.get("/user/connections", userAuth, async (req, res) => {
 
     const availableConnections = await connectionRequest.find({
       $or: [
-        { toUserId: loggedInUser, status: "accepted" },
-        { fromUserId: loggedInUser, status: "accepted" },
+        { toUserId: loggedInUser._id, status: "accepted" },
+        { fromUserId: loggedInUser._id, status: "accepted" },
       ]
     })
       .populate("fromUserId", ["firstName", "lastName"])
@@ -44,8 +44,8 @@ userRoute.get("/user/connections", userAuth, async (req, res) => {
 
     const data = [
       ...new Set(availableConnections.map((row) => 
-        row.fromUserId._id.toString() === loggedInUser.toString() 
-          ? JSON.stringify(row.toUserId) 
+        row.fromUserId._id.toString() === loggedInUser._id.toString()
+          ? JSON.stringify(row.toUserId)
           : JSON.stringify(row.fromUserId)
       ))
     ].map((user) => JSON.parse(user));
@@ -55,6 +55,7 @@ userRoute.get("/user/connections", userAuth, async (req, res) => {
     res.status(500).send("Error in fetching available connections: " + error.message);
   }
 });
+
 
 
 

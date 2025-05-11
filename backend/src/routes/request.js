@@ -70,13 +70,14 @@ requestRoute.post("/request/review/:status/:requestId",userAuth,async(req,res)=>
         let loggedInUser = req.user._id;
         const status = req.params.status;
         const requestId = req.params.requestId;
+        console.log("request_id:",requestId)
         const allowedStatus = ["accepted","rejected"];
         let flag = allowedStatus.includes(status);
         if(!flag)
         {
             return res.status(400).send("invalid request!");
         }
-        const newConnectionRequest2 = await connectionRequestModel.findOne({_id:requestId,toUserId:loggedInUser,status:"interested"})
+        const newConnectionRequest2 = await connectionRequestModel.findOne({fromUserId:requestId,toUserId:loggedInUser,status:"interested"})
         if(!newConnectionRequest2)
         {
             return res.status(404).send("user not found!");
