@@ -13,8 +13,9 @@ paymentRouter.post("/payment/create_order", async(req, res) => {
         "receipt":"reciept#1",
         "partial_payment": false,
         "notes":{
-            "key1":"value3",
-            "key2":"value2"
+            "firstName":"name1",
+            "lastName":"name2",
+            "membershipType":"silver"
         }
     })
     // save it in my database
