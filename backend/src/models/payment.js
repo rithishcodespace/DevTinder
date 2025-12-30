@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
-const paymentShema = new mongoose.Schema({
+const paymentShema = new mongoose.Schema({ // storing the order created by RazorPay
     userId:{
         type:mongoose.Types.ObjectId,
-        ref:"User",
+        ref:"User", // populate <-> joins
         required: true
     },
     paymentId:{
-        type: String
+        type: String // not given required, since payment may not occur
     },
     orderId:{
         type:String,

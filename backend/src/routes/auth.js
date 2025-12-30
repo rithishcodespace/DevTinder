@@ -16,7 +16,12 @@ authRoute.post("/signup",async (req,res)=>{
      const savedUser = await newuser.save();
      
      var token = jwt.sign({_id:savedUser._id},process.env.JWT_SECRET,{ expiresIn: "1hr" });
-     res.cookie("token",token);
+     res.cookie("token", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        maxAge: 60 * 60 * 1000
+    });
 
      res.json({  
         message:"User signup successfully!",
@@ -41,7 +46,12 @@ authRoute.post("/login",async(req,res)=>{
             const ispasswordvalid = await bcrypt.compare(req.body.password,user.password);
             if(!ispasswordvalid) return res.status(400).send("incorrect password!");
             var token = jwt.sign({_id:user._id},process.env.JWT_SECRET,{ expiresIn: "1hr" });
-            res.cookie("token",token);
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: false,        // true only in HTTPS
+                sameSite: "lax",      // IMPORTANT for localhost
+                maxAge: 60 * 60 * 1000 // 1 hour
+            });
             res.send(user);
             
         }
@@ -53,7 +63,11 @@ authRoute.post("/login",async(req,res)=>{
 
 })
 authRoute.delete("/logout",(req,res)=>{
-    res.cookie("token",null,{expires: new Date(Date.now())});
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax"
+    });
     res.status(200).send("Logged out successfull!!");
 })
 
