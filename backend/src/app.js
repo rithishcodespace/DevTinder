@@ -7,6 +7,7 @@ let authRoute = require("./routes/auth");
 let profileRoute = require("./routes/profile");
 let requestRoute = require("./routes/request");
 let userRoute = require("./routes/user");
+let paymentRoute = require("./routes/payment");
 const cron = require("./utils/Cron") // imported globally so the file will start execute
 const http = require("http"); // socket.io
 const initializeSocket = require("./utils/socket");
@@ -26,6 +27,7 @@ app.use("/",authRoute);
 app.use("/",profileRoute);
 app.use("/",requestRoute);
 app.use("/",userRoute);
+app.use("/",paymentRoute);
 
 const server = http.createServer(app) // socket.io -> app is instance of express
 initializeSocket(server) // socket.io -> see in utils
