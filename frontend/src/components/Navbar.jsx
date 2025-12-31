@@ -16,7 +16,7 @@ const Navbar = () => {
     if(response.status == 200)
     {   
         dispatch(removeUser);
-        navigate("");
+        navigate("/");
     }
   }
 
@@ -47,7 +47,8 @@ const Navbar = () => {
             </li>
             <li><Link to="request">Connection request</Link></li>
             <li><Link to="connections">Connections</Link></li>
-            <li onClick={handleLogout}><a href="">Logout</a></li>
+            <li><Link to="premium">Premium</Link></li>
+            <li onClick={handleLogout}><Link to="login">Logout</Link></li>
         </ul>
         </div>
     </div>

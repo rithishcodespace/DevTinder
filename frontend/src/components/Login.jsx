@@ -33,7 +33,7 @@ function Login() {
         alert("Login success");
         dispatch(addUser(response.data));
         localStorage.setItem("userDetails",JSON.stringify(response.data));
-        navigate("/");
+        navigate("/home");
       }
     } catch (error) {
       setError(error.response?.data || "Login failed");
