@@ -3,7 +3,9 @@ const paymentRouter = express.Router();
 const userAuth = require("../middlewares/auth");
 const razorpayInstance = require("../utils/razorpay");
 const paymentModel = require("../models/payment");
+const userModel = require("../models/user");
 const memberShipAmount = require("../utils/constants");
+const crypto = require("crypto");
 
 // sends secret_keys(via razorpayInstance) + hit razorpay to create an order
 paymentRouter.post("/payment/create_order", userAuth, async(req, res) => { 
@@ -70,9 +72,44 @@ paymentRouter.post("/payment/create_order", userAuth, async(req, res) => {
 })
 
 // dont use userAuth, since razorpay will call this not you
-router.post("/payment/webhook", async (req,res) => {
+paymentRouter.post("/payment/webhook", async (req,res) => { // webhook will call this api, on success/failure of payment, this api validates the webhook request (malicious or valid webhook from razorpay source)
     try{
+       const body = JSON.stringify(req.body);
+       
+       const webhookSignature = req.headers["x-razorpay-signature"];
 
+       const expectedSignature = crypto
+       .createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET)
+       .update(body)
+       .digest("hex");  
+
+       const isWebhookValid = expectedSignature === webhookSignature;
+
+       if(!isWebhookValid){
+        return res.status(400).json({msg:"webhook signature is invalid!"})
+       }
+
+       // update the payment status in DB
+
+       const paymentDetails = req.body.payload.payment.entity; // req.body()
+       const payment = await paymentModel.findOne({orderId: paymentDetails.order_id})       
+       payment.status = paymentDetails.status;
+       await payment.save();
+
+       // mark the user as premium
+       
+       if(req.body.event == "payment.captured"){ // success
+            const user = await userModel.findOne({_id: payment.userId});
+            user.isPremium = true;
+            user.memberShipType = payment.notes.memberShipType;
+            await user.save();
+       }
+       else if(req.body.event === "payment.failed"){ // failure
+        
+       }
+       
+       // return success response to razorpay (denoting we have successfully received the webhook) [IMPORTANT]
+       res.status(200).json({msg:"Webhook received successfully!"});
     }
     catch(error){
         res.status(500).send(error.message);

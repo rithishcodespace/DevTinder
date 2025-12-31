@@ -25,8 +25,14 @@ let userSchema = mongoose.Schema({
     gender:{
         type:String,
         enum:["male","female","others"],
-        required : true
-        
+        required : true 
+    },
+    isPremium:{
+        type: Boolean,
+        default: false
+    },
+    memberShipType:{
+        type: String,
     }
     
 },
